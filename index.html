@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Simulation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100" >
+    <div id="app" class="max-w-xl mx-auto px-4 py-8 ">
+      <script type="module" src="/src/main.js"></script>
+        <h1 class="text-3xl text-center mb-6 font-bold">Credit Simulation</h1>
+
+        <div class="mb-4">
+            <label for="loan-amount" class="block text-lg font-bold">Loan Amount (Rp):</label>
+            <input type="number" v-model="loanAmount" id="loan-amount" class="mt-1 p-2 rounded-md w-full">
+        </div>
+
+        <div class="mb-4">
+            <label for="loan-term" class="block text-lg font-bold">Loan Term (Months):</label>
+            <input type="number" v-model="loanTerm" id="loan-term" class="mt-1 p-2 rounded-md w-full">
+        </div>
+
+        <div class="mb-4">
+            <label for="interest-rate" class="block text-lg font-bold ">Interest Rate (%):</label>
+            <input type="number" v-model="interestRate" id="interest-rate" class="mt-1 p-2 rounded-md w-full">
+        </div>
+
+        <button @click="calculateLoan" class="bg-blue-500 text-white p-2 rounded-md w-full hover:bg-blue-600 text-lg font-bold mt-3">Calculate Loan</button>
+
+        <div class="mt-6 ">
+            <h2 class="text-lg font-bold">Result:</h2>
+            <p class="text-base" v-if="monthlyPayment">Monthly Payment <span class="ml-3">:</span> Rp {{ monthlyPayment }}</p>
+            <p class="text-base" v-if="totalPayment">Total Payment <span class="ml-10">:</span> Rp {{ totalPayment }}</p>
+        </div>
+
+    </div>
+
+    <!-- Load Vue 3 from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.31"></script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    loanAmount: 0,
+                    loanTerm: 0,
+                    interestRate: 0,
+                    monthlyPayment: 0,
+                    totalPayment: 0
+                };
+            },
+            methods: {
+                calculateLoan() {
+                    // Credit calculation logic
+                    const loanAmount = parseFloat(this.loanAmount);
+                    const loanTerm = parseInt(this.loanTerm);
+                    const interestRate = parseFloat(this.interestRate) / 100;
+
+                    const principal = loanAmount / loanTerm;
+                    const interestPerMonth = (loanAmount * interestRate) / loanTerm;
+                    const totalPayment = loanAmount + (interestPerMonth * loanTerm);
+
+                    this.monthlyPayment = (principal + interestPerMonth).toFixed(2);
+                    this.totalPayment = totalPayment.toFixed(2);
+
+                    // Remove ".00" if the decimal value is zero
+                    if (this.monthlyPayment.endsWith('.00')) {
+                        this.monthlyPayment = this.monthlyPayment.slice(0, -3);
+                    }
+                    if (this.totalPayment.endsWith('.00')) {
+                        this.totalPayment = this.totalPayment.slice(0, -3);
+                    }
+                }
+            }
+        });
+
+        // Mount the Vue 3 app to the element with id "app"
+        app.mount("#app");
+    </script>
+</body>
+</html>
