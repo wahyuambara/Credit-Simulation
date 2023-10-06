@@ -9,16 +9,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100" >
-    <div id="app" class="max-w-xl mx-auto px-4 py-8 ">
+<body class="bg-white " >
+    <div id="app" class="max-w-xl mx-auto px-4 py-8 lg:pb-5 w-96 mt-14 lg:mt-5 rounded-lg bg-gray-100 shadow-md lg:w-full">
       <script type="module" src="/src/main.js"></script>
         <h1 class="text-3xl text-center mb-6 font-bold">Credit Simulation</h1>
 
         <div class="mb-4">
             <label for="loan-amount" class="block text-lg font-bold">Loan Amount (Rp):</label>
-            <input type="number" v-model="loanAmount" id="loan-amount" class="mt-1 p-2 rounded-md w-full">
-        </div>
+            <input type="text" v-model="loanAmount" id="loan-amount" class="mt-1 p-2 rounded-md w-full">
 
+        </div>
+        <a href="" target="_blank"></a>
         <div class="mb-4">
             <label for="loan-term" class="block text-lg font-bold">Loan Term (Months):</label>
             <input type="number" v-model="loanTerm" id="loan-term" class="mt-1 p-2 rounded-md w-full">
@@ -28,14 +29,18 @@
             <label for="interest-rate" class="block text-lg font-bold ">Interest Rate (%):</label>
             <input type="number" v-model="interestRate" id="interest-rate" class="mt-1 p-2 rounded-md w-full">
         </div>
-
-        <button @click="calculateLoan" class="bg-blue-500 text-white p-2 rounded-md w-full hover:bg-blue-600 text-lg font-bold mt-3">Calculate Loan</button>
-
-        <div class="mt-6 ">
-            <h2 class="text-lg font-bold">Result:</h2>
-            <p class="text-base" v-if="monthlyPayment">Monthly Payment <span class="ml-3">:</span> Rp {{ monthlyPayment }}</p>
-            <p class="text-base" v-if="totalPayment">Total Payment <span class="ml-10">:</span> Rp {{ totalPayment }}</p>
+        <div class="grid grid-cols-2 gap-5">
+            <button @click="calculateLoan" class="bg-blue-500 text-white p-2 rounded-md w-full hover:bg-blue-600 text-lg font-bold mt-3">Calculate</button>
+            <button @click="resetForm" class="bg-red-500 text-white p-2 rounded-md w-full hover:bg-red-600 text-lg font-bold mt-3">Reset</button>
         </div>
+        
+
+        <div class="mt-6 bg-gray-300 p-4 rounded-lg">
+            <h2 class="text-lg font-bold">Result:</h2>
+            <p class="text-base" v-if="monthlyPayment">Monthly Payment <span class="ml-3">:</span> Rp {{ monthlyPayment | formatCurrency }}</p>
+            <p class="text-base" v-if="totalPayment">Total Payment <span class="ml-10">:</span> Rp {{ totalPayment | formatCurrency }}</p>
+        </div>
+        
 
     </div>
 
@@ -52,10 +57,24 @@
                     totalPayment: 0
                 };
             },
+            filters: {
+                formatCurrency(value) {
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                }
+            },
             methods: {
+                
+                resetForm() {
+                    // Mengatur ulang semua data input menjadi 0 atau string kosong
+                    this.loanAmount = 0;
+                    this.loanTerm = 0;
+                    this.interestRate = 0;
+                    this.monthlyPayment = 0;
+                    this.totalPayment = 0;
+                },
                 calculateLoan() {
                     // Credit calculation logic
-                    const loanAmount = parseFloat(this.loanAmount);
+                    const loanAmount = parseFloat(this.loanAmount.replace(/\./g, '')); // Menghapus titik pemisah ribuan
                     const loanTerm = parseInt(this.loanTerm);
                     const interestRate = parseFloat(this.interestRate) / 100;
 
@@ -66,14 +85,11 @@
                     this.monthlyPayment = (principal + interestPerMonth).toFixed(2);
                     this.totalPayment = totalPayment.toFixed(2);
 
-                    // Remove ".00" if the decimal value is zero
-                    if (this.monthlyPayment.endsWith('.00')) {
-                        this.monthlyPayment = this.monthlyPayment.slice(0, -3);
-                    }
-                    if (this.totalPayment.endsWith('.00')) {
-                        this.totalPayment = this.totalPayment.slice(0, -3);
-                    }
+                    // Tambahkan titik sebagai pemisah ribuan saat menampilkan
+                    this.loanAmount = loanAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                 }
+
+                
             }
         });
 
