@@ -48,53 +48,51 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.31"></script>
     <script>
         const app = Vue.createApp({
-            data() {
-                return {
-                    loanAmount: 0,
-                    loanTerm: 0,
-                    interestRate: 0,
-                    monthlyPayment: 0,
-                    totalPayment: 0
-                };
-            },
-            filters: {
-                formatCurrency(value) {
-                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                }
-            },
-            methods: {
-                
-                resetForm() {
-                    // Mengatur ulang semua data input menjadi 0 atau string kosong
-                    this.loanAmount = 0;
-                    this.loanTerm = 0;
-                    this.interestRate = 0;
-                    this.monthlyPayment = 0;
-                    this.totalPayment = 0;
-                },
-                calculateLoan() {
-                    // Credit calculation logic
-                    const loanAmount = parseFloat(this.loanAmount.replace(/\./g, '')); // Menghapus titik pemisah ribuan
-                    const loanTerm = parseInt(this.loanTerm);
-                    const interestRate = parseFloat(this.interestRate) / 100;
+    data() {
+        return {
+            loanAmount: "", // Menggunakan string kosong sebagai nilai awal
+            loanTerm: "",
+            interestRate: "",
+            monthlyPayment: 0,
+            totalPayment: 0
+        };
+    },
+    filters: {
+        formatCurrency(value) {
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+    },
+    methods: {
+        resetForm() {
+            // Mengatur ulang semua data input menjadi 0 atau string kosong
+            this.loanAmount = ""; // Menggunakan string kosong
+            this.loanTerm = "";
+            this.interestRate = "";
+            this.monthlyPayment = 0;
+            this.totalPayment = 0;
+        },
+        calculateLoan() {
+            // Credit calculation logic
+            const loanAmount = parseFloat(this.loanAmount.replace(/\./g, '')); // Menghapus titik pemisah ribuan
+            const loanTerm = parseInt(this.loanTerm);
+            const interestRate = parseFloat(this.interestRate) / 100;
 
-                    const principal = loanAmount / loanTerm;
-                    const interestPerMonth = (loanAmount * interestRate) / loanTerm;
-                    const totalPayment = loanAmount + (interestPerMonth * loanTerm);
+            const principal = loanAmount / loanTerm;
+            const interestPerMonth = (loanAmount * interestRate) / loanTerm;
+            const totalPayment = loanAmount + (interestPerMonth * loanTerm);
 
-                    this.monthlyPayment = (principal + interestPerMonth).toFixed(2);
-                    this.totalPayment = totalPayment.toFixed(2);
+            this.monthlyPayment = (principal + interestPerMonth).toFixed(2);
+            this.totalPayment = totalPayment.toFixed(2);
 
-                    // Tambahkan titik sebagai pemisah ribuan saat menampilkan
-                    this.loanAmount = loanAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                }
+            // Tambahkan titik sebagai pemisah ribuan saat menampilkan
+            this.loanAmount = loanAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+    }
+});
 
-                
-            }
-        });
+// Mount the Vue 3 app to the element with id "app"
+app.mount("#app");
 
-        // Mount the Vue 3 app to the element with id "app"
-        app.mount("#app");
     </script>
 </body>
 </html>
