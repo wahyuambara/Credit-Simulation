@@ -9,19 +9,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-white " >
+<body class="bg-blue-500 " >
     <div id="app" class="max-w-xl mx-auto px-4 py-8 lg:pb-5 w-96 mt-14 lg:mt-5 rounded-lg bg-gray-100 shadow-md lg:w-full">
       <script type="module" src="/src/main.js"></script>
         <h1 class="text-3xl text-center mb-6 font-bold">Credit Simulation</h1>
 
         <div class="mb-4">
-            <label for="loan-amount" class="block text-lg font-bold">Loan Amount (Rp):</label>
-            <input type="text" v-model="loanAmount" id="loan-amount" class="mt-1 p-2 rounded-md w-full">
+            <label for="loan-amount" class="block text-lg font-bold bg-slate-500">Loan Amount (Rp):</label>
+            <input type="text" v-model="loanAmount" id="loan-amount" class="mt-1 p-2 rounded-md w-full bg-slate-600">
 
         </div>
         <a href="" target="_blank"></a>
-        <div class="mb-4">
-            <label for="loan-term" class="block text-lg font-bold">Loan Term (Months):</label>
+        <div class="mb-4 bg-slate-500">
+            <label for="loan-term" class="block text-lg font-bold">Loaan Term (Months):</label>
             <input type="number" v-model="loanTerm" id="loan-term" class="mt-1 p-2 rounded-md w-full">
         </div>
 
@@ -35,7 +35,7 @@
         </div>
         
 
-        <div class="mt-6 bg-gray-300 p-4 rounded-lg">
+        <div class="mt-6 bg-white p-4 rounded-lg">
             <h2 class="text-lg font-bold">Result:</h2>
             <p class="text-base" v-if="monthlyPayment">Monthly Payment <span class="ml-3">:</span> Rp {{ monthlyPayment | formatCurrency }}</p>
             <p class="text-base" v-if="totalPayment">Total Payment <span class="ml-10">:</span> Rp {{ totalPayment | formatCurrency }}</p>
@@ -57,11 +57,7 @@
             totalPayment: 0
         };
     },
-    filters: {
-        formatCurrency(value) {
-            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
-    },
+
     methods: {
         resetForm() {
             // Mengatur ulang semua data input menjadi 0 atau string kosong
